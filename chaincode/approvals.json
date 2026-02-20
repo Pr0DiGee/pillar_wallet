@@ -1,0 +1,2 @@
+Approved chaincode definition for chaincode 'basic' on channel 'mychannel':
+sequence: 1, version: 1.0, init-required: false, package-id: basic_1.0:1, endorsement plugin: escc, validation plugin: vscc

@@ -1,0 +1,7 @@
+vendor
+*.log
+/tmp
+*.tar.gz
+.git
+node_modules
+.DS_Store

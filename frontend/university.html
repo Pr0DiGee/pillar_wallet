@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Portal - Pillar Wallet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://bundle.run/buffer@6.0.3"></script>
+    <style>
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Scrollbar for Logs */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center p-4 selection:bg-pink-500 selection:text-white">
+
+    <nav class="w-full max-w-4xl flex justify-between items-center mb-12 mt-4">
+        <a href="index.html" class="text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Back to Home
+        </a>
+        <h1 class="text-xl font-bold text-pink-400">University Portal</h1>
+    </nav>
+
+    <!-- SECTION 1: REGISTRATION -->
+    <div id="registrationSection" class="w-full max-w-lg glass p-8 rounded-2xl shadow-2xl mb-8">
+        <header class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-white">Join the Network</h2>
+            <p class="text-slate-400 text-sm mt-1">Register your institution to issue global credentials.</p>
+        </header>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Institution Name</label>
+                <input id="regName" type="text" placeholder="e.g. Stanford University"
+                    class="w-full p-3 rounded bg-slate-950 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Authorization Code</label>
+                <input id="regAuth" type="password" placeholder="Provided upon payment"
+                    class="w-full p-3 rounded bg-slate-950 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono">
+            </div>
+            <button id="regBtn"
+                class="w-full bg-pink-600 hover:bg-pink-500 p-3 rounded font-bold transition-all shadow-lg active:scale-95">
+                Register Institution
+            </button>
+        </div>
+
+        <div id="regResult" class="hidden mt-6 bg-slate-950 p-4 rounded-lg border border-slate-700">
+            <p class="text-green-400 font-bold text-sm mb-2 text-center">✓ Registration Successful!</p>
+            <div class="space-y-4">
+                <div>
+                    <span class="text-slate-500 text-[10px] uppercase block mb-1">Your Issuer Private Key (SAVE THIS
+                        SECURELY):</span>
+                    <p id="regPrivKey"
+                        class="text-red-400 font-mono text-[10px] break-all bg-black/50 p-2 rounded border border-red-900/30 select-all cursor-pointer hover:bg-black/70 transition-colors">
+                    </p>
+                </div>
+                <button id="goToDashboardBtn"
+                    class="w-full bg-slate-700 hover:bg-slate-600 text-xs p-2 rounded mt-2 transition-colors">
+                    Continue to Dashboard &rarr;
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: DASHBOARD -->
+    <div id="dashboardSection"
+        class="hidden w-full max-w-3xl glass p-8 rounded-2xl shadow-2xl border-t-4 border-pink-500 transition-all duration-500">
+        <header class="flex justify-between items-start mb-6 border-b border-slate-700 pb-4">
+            <div>
+                <h2 class="text-2xl font-bold text-white">Issuance Dashboard</h2>
+                <p class="text-slate-400 text-sm">Securely issue Verifiable Credentials.</p>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] text-slate-500 uppercase">Status</p>
+                <p class="text-green-400 text-xs font-bold flex items-center justify-end gap-1">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Active
+                </p>
+            </div>
+        </header>
+
+        <!-- GLOBAL AUTH (Used by both modes) -->
+        <div class="mb-8 bg-slate-950/50 p-4 rounded-xl border border-slate-700/50">
+            <div class="flex justify-between items-center mb-2">
+                <label class="block text-xs font-bold text-pink-400 uppercase">1. Authorization (Required)</label>
+                <span class="text-[10px] text-slate-500">Key is cached in browser session only</span>
+            </div>
+            <div class="space-y-3">
+                <input id="issuerNameInput" type="text" placeholder="Your Registered Institution Name (e.g. Stanford)"
+                    class="w-full p-3 rounded bg-slate-900 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono text-xs text-pink-100 placeholder-slate-600">
+                <input id="issuerKey" type="password"
+                    placeholder="Paste your Issuer Private Key here (Common for all issuances)"
+                    class="w-full p-3 rounded bg-slate-900 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono text-xs text-pink-100 placeholder-slate-600">
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="flex space-x-4 mb-6 border-b border-slate-700">
+            <button id="tabSingle"
+                class="pb-2 text-sm font-bold text-pink-400 border-b-2 border-pink-400 transition-colors">
+                Single Issue
+            </button>
+            <button id="tabBatch" class="pb-2 text-sm font-bold text-slate-500 hover:text-slate-300 transition-colors">
+                Batch Issue (Bulk)
+            </button>
+        </div>
+
+        <!-- MODE: SINGLE ISSUE -->
+        <div id="panelSingle" class="grid md:grid-cols-1 gap-6">
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold text-slate-300 uppercase">Recipient Details</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Credential ID</label>
+                        <input id="credID" type="text" placeholder="e.g. CERT-2024-001"
+                            class="w-full p-3 rounded bg-slate-950 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">PDF Document</label>
+                        <input id="pdfFile" type="file" accept="application/pdf"
+                            class="w-full text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-pink-600 file:text-white hover:file:bg-pink-700 cursor-pointer" />
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Student Public Key
+                        (Hex)</label>
+                    <input id="studentPub" type="text" placeholder="Provided by student"
+                        class="w-full p-3 rounded bg-slate-950 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono text-xs">
+                </div>
+
+                <button id="issueBtn"
+                    class="w-full bg-slate-800 hover:bg-pink-600 p-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 border border-slate-600 hover:border-pink-400 text-slate-200 hover:text-white mt-4">
+                    Sign & Issue Credential
+                </button>
+                <div id="issueResult"
+                    class="hidden mt-4 p-4 bg-green-900/20 border border-green-500 rounded text-center text-xs"></div>
+            </div>
+        </div>
+
+        <!-- MODE: BATCH ISSUE -->
+        <div id="panelBatch" class="hidden space-y-6">
+            <div class="bg-blue-900/20 border border-blue-500/30 p-4 rounded-lg">
+                <h3 class="text-sm font-bold text-blue-400 mb-2">Batch Instructions</h3>
+                <ol class="list-decimal list-inside text-xs text-slate-400 space-y-1">
+                    <li>Create a JSON file named <code>manifest.json</code> (see format below).</li>
+                    <li>Ensure <code>pdfFileName</code> matches the files you upload.</li>
+                    <li>Select the Manifest and <b>ALL</b> PDF files together.</li>
+                </ol>
+                <pre class="bg-black/50 p-2 mt-2 rounded text-[10px] text-slate-300 font-mono overflow-x-auto">
+[
+  { "credentialID": "BATCH-01", "studentPubKey": "04...", "pdfFileName": "cert_alice.pdf" },
+  { "credentialID": "BATCH-02", "studentPubKey": "04...", "pdfFileName": "cert_bob.pdf" }
+]</pre>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">1. Manifest File (JSON)</label>
+                    <input id="batchManifest" type="file" accept=".json"
+                        class="w-full text-xs text-slate-300 file:mr-2 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" />
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">2. PDF Certificates
+                        (Multiple)</label>
+                    <input id="batchFiles" type="file" accept="application/pdf" multiple
+                        class="w-full text-xs text-slate-300 file:mr-2 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" />
+                </div>
+            </div>
+
+            <button id="batchIssueBtn"
+                class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 p-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 border border-white/10">
+                Start Batch Processing
+            </button>
+
+            <!-- Console Log -->
+            <div
+                class="bg-black/80 rounded-lg p-4 font-mono text-[10px] h-48 overflow-y-auto border border-slate-700 scrollbar-hide">
+                <div id="batchLog" class="space-y-1 text-slate-400">
+                    <span class="text-slate-600">[SYSTEM] Ready for batch operations.</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Login Visual -->
+    <div id="loginPrompt" class="text-center mt-4">
+        <p class="text-sm text-slate-400">Already registered? <button id="showDashboardLink"
+                class="text-pink-400 hover:underline">Access Dashboard</button></p>
+    </div>
+
+    <script type="module">
+        import * as eccryptoJS from 'https://esm.sh/eccrypto-js@5.4.0';
+        window.Buffer = buffer.Buffer;
+
+        // Elements
+        const regSection = document.getElementById('registrationSection');
+        const dashSection = document.getElementById('dashboardSection');
+        const loginPrompt = document.getElementById('loginPrompt');
+
+        const regBtn = document.getElementById('regBtn');
+        const regResult = document.getElementById('regResult');
+        const showDashLink = document.getElementById('showDashboardLink');
+        const goToDashBtn = document.getElementById('goToDashboardBtn');
+
+        // Tabs
+        const tabSingle = document.getElementById('tabSingle');
+        const tabBatch = document.getElementById('tabBatch');
+        const panelSingle = document.getElementById('panelSingle');
+        const panelBatch = document.getElementById('panelBatch');
+
+        // Issuance
+        const issueBtn = document.getElementById('issueBtn');
+        const issueResult = document.getElementById('issueResult');
+        const batchIssueBtn = document.getElementById('batchIssueBtn');
+        const batchLog = document.getElementById('batchLog');
+
+        // Navigation
+        const showDashboard = () => {
+            regSection.classList.add('hidden');
+            loginPrompt.classList.add('hidden');
+            dashSection.classList.remove('hidden');
+        };
+
+        const switchTab = (mode) => {
+            if (mode === 'single') {
+                tabSingle.className = "pb-2 text-sm font-bold text-pink-400 border-b-2 border-pink-400 transition-colors";
+                tabBatch.className = "pb-2 text-sm font-bold text-slate-500 hover:text-slate-300 transition-colors";
+                panelSingle.classList.remove('hidden');
+                panelBatch.classList.add('hidden');
+            } else {
+                tabBatch.className = "pb-2 text-sm font-bold text-blue-400 border-b-2 border-blue-400 transition-colors";
+                tabSingle.className = "pb-2 text-sm font-bold text-slate-500 hover:text-slate-300 transition-colors";
+                panelSingle.classList.add('hidden');
+                panelBatch.classList.remove('hidden');
+            }
+        };
+
+        showDashLink.addEventListener('click', showDashboard);
+        goToDashBtn.addEventListener('click', () => {
+            const key = document.getElementById('regPrivKey').innerText;
+            if (key) document.getElementById('issuerKey').value = key;
+            showDashboard();
+        });
+        tabSingle.addEventListener('click', () => switchTab('single'));
+        tabBatch.addEventListener('click', () => switchTab('batch'));
+
+        // --- API Config ---
+        const API_URL = (window.location.port === '3000')
+            ? ''
+            : 'http://127.0.0.1:3000';
+
+        // --- Logic: Register ---
+        regBtn.addEventListener('click', async () => {
+            const name = document.getElementById('regName').value.trim();
+            const authCode = document.getElementById('regAuth').value.trim();
+            if (!name || !authCode) return alert("All fields required.");
+
+            regBtn.innerText = "Processing...";
+            regBtn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, authCode })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+
+                document.getElementById('regPrivKey').innerText = data.privateKey;
+                document.getElementById('issuerNameInput').value = name;
+                regResult.classList.remove('hidden');
+            } catch (e) {
+                alert("Registration Failed: " + e.message);
+            } finally {
+                regBtn.innerText = "Register Institution";
+                regBtn.disabled = false;
+            }
+        });
+
+        // --- Logic: Single Issue ---
+        issueBtn.addEventListener('click', async () => {
+            const issuerKey = document.getElementById('issuerKey').value.trim();
+            const issuerName = document.getElementById('issuerNameInput').value.trim();
+            const studentPub = document.getElementById('studentPub').value.trim();
+            const credID = document.getElementById('credID').value.trim();
+            const fileInput = document.getElementById('pdfFile');
+
+            if (!issuerKey || !issuerName || !studentPub || !credID || !fileInput.files[0]) return alert("All fields required.");
+
+            issueBtn.disabled = true;
+            issueBtn.innerText = "Signing...";
+
+            try {
+                const formData = new FormData();
+                formData.append('credentialID', credID);
+                formData.append('studentPubKey', studentPub);
+                formData.append('issuerPrivateKey', issuerKey);
+                formData.append('issuerName', issuerName);
+                formData.append('pdf', fileInput.files[0]);
+
+                const res = await fetch(`${API_URL}/issue`, { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+
+                issueResult.classList.remove('hidden');
+                issueResult.innerHTML = `<span class="text-green-400">✓ Success! IPFS CID: ${data.ipfsCid}</span>`;
+            } catch (e) {
+                alert("Failure: " + e.message);
+            } finally {
+                issueBtn.disabled = false;
+                issueBtn.innerText = "Sign & Issue Credential";
+            }
+        });
+
+        // --- Logic: Batch Issue ---
+        const logBatch = (msg, type = 'info') => {
+            const color = type === 'error' ? 'text-red-400' : (type === 'success' ? 'text-green-400' : 'text-slate-400');
+            const div = document.createElement('div');
+            div.className = color;
+            div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            batchLog.appendChild(div);
+            batchLog.parentElement.scrollTop = batchLog.parentElement.scrollHeight; // Auto-scroll
+        };
+
+        batchIssueBtn.addEventListener('click', async () => {
+            const issuerKey = document.getElementById('issuerKey').value.trim();
+            const issuerName = document.getElementById('issuerNameInput').value.trim();
+            const manifestFile = document.getElementById('batchManifest').files[0];
+            const pdfFiles = document.getElementById('batchFiles').files;
+
+            if (!issuerKey || !issuerName) return alert("Please enter Authorization Key and Name above.");
+            if (!manifestFile || pdfFiles.length === 0) return alert("Please upload Manifest and PDFs.");
+
+            batchIssueBtn.disabled = true;
+            logBatch("Starting Batch Process...", 'info');
+            logBatch(`Found ${pdfFiles.length} PDF files in buffer.`);
+
+            try {
+                // Parse Manifest
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    let manifest;
+                    try {
+                        manifest = JSON.parse(e.target.result);
+                    } catch (err) {
+                        return logBatch("Invalid JSON Manifest.", 'error');
+                    }
+
+                    logBatch(`Parsed Manifest: ${manifest.length} entries found.`);
+
+                    let successCount = 0;
+                    let failCount = 0;
+
+                    // Iterate
+                    for (const item of manifest) {
+                        const { credentialID, studentPubKey, pdfFileName } = item;
+                        logBatch(`Processing ID: ${credentialID}...`);
+
+                        // Find File
+                        let targetFile = null;
+                        for (let i = 0; i < pdfFiles.length; i++) {
+                            if (pdfFiles[i].name === pdfFileName) {
+                                targetFile = pdfFiles[i];
+                                break;
+                            }
+                        }
+
+                        if (!targetFile) {
+                            logBatch(`--> Error: File '${pdfFileName}' not found in upload.`, 'error');
+                            failCount++;
+                            continue;
+                        }
+
+                        // Upload
+                        try {
+                            const formData = new FormData();
+                            formData.append('credentialID', credentialID);
+                            formData.append('studentPubKey', studentPubKey);
+                            formData.append('issuerPrivateKey', issuerKey);
+                            formData.append('issuerName', issuerName);
+                            formData.append('pdf', targetFile);
+
+                            const res = await fetch(`${API_URL}/issue`, { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (data.error) throw new Error(data.error);
+
+                            logBatch(`--> Success. CID: ${data.ipfsCid}`, 'success');
+                            successCount++;
+
+                        } catch (err) {
+                            logBatch(`--> API Error: ${err.message}`, 'error');
+                            failCount++;
+                        }
+
+                        // Small delay to prevent rate limits or UI freeze
+                        await new Promise(r => setTimeout(r, 200));
+                    }
+
+                    logBatch(`BATCH COMPLETE. Success: ${successCount}, Failed: ${failCount}`, 'success');
+                    batchIssueBtn.disabled = false;
+                };
+                reader.readAsText(manifestFile);
+
+            } catch (e) {
+                logBatch(`System Error: ${e.message}`, 'error');
+                batchIssueBtn.disabled = false;
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+# Node dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Fabric Wallet
+wallet/
+
+# Logs
+*.log
+nohup.out
+
+# OS files
+.DS_Store
+
+# Temporary files
+/tmp
+*.tmp
+
+# Blockchain specific
+vars/
+organizations/
+/chaincode/bin
+/chaincode/pkg
+/chaincode/vendor
