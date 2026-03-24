@@ -8,68 +8,309 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://bundle.run/buffer@6.0.3"></script>
     <style>
+        /* common variables and utility classes like index.html */
+        input{
+            border-radius: 3px;
+        }
+        :root {
+            --primary: #0077b6;
+            --primary-dark: #00b4d8;
+            --accent: #0077b6;
+            --radius: 0.75rem;
+            --font-mono: 'Courier New', monospace;
+        }
+
+        /* Form slide-up animation */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #registrationSection {
+            animation: slideUp 0.8s ease-out 0.3s both;
+        }
+
+        #dashboardSection {
+            animation: slideUp 0.8s ease-out 0.6s both;
+        }
+        .file-input {
+            width: 80%;
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            border: 1px solid transparent;
+            
+        }
+        .file-input::-webkit-file-upload-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: #0077b6;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .file-input:hover::-webkit-file-upload-button { background-color: #00b4d8; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); }
+        body{
+            font-family: sans-serif;
+        }
+        #registrationSection{
+            width: 60%;
+            margin: auto;
+        }
+        /* glass cards and panels */
+        
+        .hero-title { 
+            font-size: 3rem; 
+            font-weight: 800; 
+            color: #bdc3c7; 
+            -webkit-background-clip: text; 
+            -webkit-text-stroke: 1px rgba(52, 23, 52, 0.911);
+            background-clip: text; 
+            margin: 0 0 0.75rem; 
+            transition: 0.5s;
+        }
+        
+        .header{
+            display: flex;
+            width: 100%; 
+            margin: 0 auto; 
+            justify-content: space-around;
+            background: linear-gradient(rgba(52, 73, 94, 0.7), rgba(27, 41, 54, 0.7));
+            text-align: center;
+            animation: slideUp 0.8s ease-out 0.05s both;
+        }
+        header{
+            width: 100%; 
+            margin: auto; 
+            padding: 10px; 
+            background: linear-gradient(rgba(52, 73, 94, 0.936), rgba(27, 41, 54, 0.712));
+            text-align: center;
+            margin-top: 60px;
+            border-radius: 10px 10px 0 0;
+        }
+        
         .glass {
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
         }
+
+        /* blur-only-background container */
+        .blur-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        .blur-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--bg-image) center/cover no-repeat;
+            filter: blur(10px);
+            transition: filter 0.3s;
+            z-index: -1;
+        }
+        .blur-bg:hover::before {
+            filter: blur(20px);
+        }
+        .space-y-4{
+            height: 400px;
+            border-radius: 0 0px 0 0.375rem;
+            width: 50%;
+            background: linear-gradient(135deg,#c7c7c7d6,#f8fafbd6);
+            padding: 30px;
+            padding-top: 80px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.08);
+        }
+        .container{
+            width: 100%;
+            margin: auto;
+            margin-top: -24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 0 0 0.375rem 0.375rem;
+            display: flex;
+        }
+        .box1{
+            width: 50%;
+            background-image: url("unicer5.jpg");
+            background-position: center;
+            background-size: cover;
+            border-radius: 0 0 var(--radius) 0;
+
+        }
+
+
+        /* form-related helpers */
+        .form-label { display: block; font-size: 0.625rem; font-weight: 700; text-transform: uppercase; color: #03045e; margin-bottom: 0.5rem; }
+        .form-input {
+            width: 100%; 
+            padding: 0.75rem; 
+            border-radius: 0.375rem;
+            background: #fff; 
+            border: 1px solid #0077b6;
+            font-family: var(--font-mono); 
+            font-size: 0.75rem;
+            color: #03045e; 
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        .form-input:focus { border-color: #00b4d8; outline: none; transition: 0.3s; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 3px rgba(0, 180, 216, 0.1); }
+        
+
+       
+        .header{
+            display: flex;
+            width: 100%; 
+            justify-content: space-around;
+            align-items: center;
+            gap: 2rem;
+            margin: 0 auto; 
+            /* padding: 10px;  */
+            background: linear-gradient(rgba(52, 73, 94, 0.936), rgba(27, 41, 54, 0.712)); 
+              
+            text-align: center;
+            height: 120px;
+            margin-bottom: 30px;
+        }
+
+        
+        .hero-title { 
+            font-size: 3rem; 
+            font-weight: 800; 
+            color: #0077b6; 
+            -webkit-background-clip: text; 
+           -webkit-text-stroke: 1px #00b4d8;
+            background-clip: text; 
+            margin: 0 0 0.75rem; 
+            transition: 0.5s;
+            animation: slideUp 0.8s ease-out 0.1s both;
+        }
+        .hero-title:hover{
+            -webkit-text-stroke: 1px #00b4d8;
+            transition: 0.5s;
+        }
+        .btn {
+            background: #0077b6; 
+            border: 1px solid #0077b6;
+            color: #fff; 
+            transition: ease-in-out 0.4s;
+            border-radius: 0.375rem;
+            width: 100%; padding: 12px;
+            font-weight: 600; 
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 119, 182, 0.25);
+        }
+        .btn-primary { 
+            background: #0077b6; 
+            border: 1px solid #0077b6;
+            color: #fff; 
+            transition: ease-in-out 0.4s;
+            border-radius: 0.375rem;
+            width: 100%; padding: 12px;
+            font-weight: 600; 
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 119, 182, 0.25);
+        }
+        
+
+        .btn-primary:hover { 
+            background: linear-gradient(#0077b6, #00b4d8);
+            border-color: #00b4d8;
+            border-radius: 0 30px 0 30px;
+            box-shadow: 0 6px 16px rgba(0, 180, 216, 0.35);
+            transition: ease-in-out 0.4s; 
+        }
+
+        .btn-active:active { 
+            transform: scale(0.95); 
+        }
+        
+
+        /* navigation */
+        .nav-link { color: #0077b6; display: flex; align-items: left; gap: 0.5rem; transition: color 0.2s; padding-left: 30px; }
+        .nav-link:hover { color: #351515; }
 
         /* Custom Scrollbar for Logs */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        footer{
+            width: 100%;
+            justify-content: center;
+            padding: 20px;
+            height: 100px;
+            background: linear-gradient( #2c3e50, #2c3e50, #202e3f); 
+            font-size: 50px;
+            margin: auto;
+        
         }
+        body{
+            background-image: url("download.jpg");
+            background-position: center;
+            background-color: #e0f2fe;
+            margin: 0;
+            box-sizing: 0;
+            font-family: sans-serif;
+            position: relative;
+        }
+        body::before { content: ""; position: fixed; inset: 0; background: rgba(197, 197, 200, 0.45); pointer-events: none; z-index: -1; }
+   
+        
     </style>
 </head>
 
-<body
-    class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center p-4 selection:bg-pink-500 selection:text-white">
+<body>
 
-    <nav class="w-full max-w-4xl flex justify-between items-center mb-12 mt-4">
-        <a href="index.html" class="text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+    <nav class="header">
+        <a href="index.html" class="nav-link">
+            
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
             Back to Home
         </a>
-        <h1 class="text-xl font-bold text-pink-400">University Portal</h1>
+        <h1 class="hero-title" style="font-size:2rem;">University Portal</h1>
     </nav>
 
     <!-- SECTION 1: REGISTRATION -->
-    <div id="registrationSection" class="w-full max-w-lg glass p-8 rounded-2xl shadow-2xl mb-8">
+     
+    <div id="registrationSection" style="--bg-image:url('university-bg.jpg');">
         <header class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-white">Join the Network</h2>
-            <p class="text-slate-400 text-sm mt-1">Register your institution to issue global credentials.</p>
+            <h2 class="text-2xl font-bold text-white" style="color: #50a9bbd8;">Join the Network</h2>
+            <p class="text-slate-400 text-sm mt-1" style="color: #50a9bbd8;">Register your institution to issue global credentials.</p>
         </header>
-
+        <div class="container">
         <div class="space-y-4">
             <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Institution Name</label>
-                <input id="regName" type="text" placeholder="e.g. Stanford University"
-                    class="w-full p-3 rounded bg-slate-950 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono">
+                <label class="form-label" style="color: #03045e;">Institution Name</label>
+                <input id="regName" type="text" placeholder="e.g. Stanford University" class="form-input">
             </div>
             <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Authorization Code</label>
-                <input id="regAuth" type="password" placeholder="Provided upon payment"
-                    class="w-full p-3 rounded bg-slate-950 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono">
+                <label class="form-label" style="color: #03045e;">Authorization Code</label>
+                <input id="regAuth" type="password" placeholder="Provided upon payment" class="form-input">
             </div>
-            <button id="regBtn"
-                class="w-full bg-pink-600 hover:bg-pink-500 p-3 rounded font-bold transition-all shadow-lg active:scale-95">
+            <button id="regBtn" class="btn btn-primary btn-active">
                 Register Institution
             </button>
+        </div>
+        <div class="box1"></div>
         </div>
 
         <div id="regResult" class="hidden mt-6 bg-slate-950 p-4 rounded-lg border border-slate-700">
             <p class="text-green-400 font-bold text-sm mb-2 text-center">✓ Registration Successful!</p>
             <div class="space-y-4">
                 <div>
-                    <span class="text-slate-500 text-[10px] uppercase block mb-1">Your Issuer Private Key (SAVE THIS
-                        SECURELY):</span>
+                    <span class="text-slate-500 text-[10px] uppercase block mb-1">Your Issuer Private Key (SAVE THIS SECURELY):</span>
                     <p id="regPrivKey"
                         class="text-red-400 font-mono text-[10px] break-all bg-black/50 p-2 rounded border border-red-900/30 select-all cursor-pointer hover:bg-black/70 transition-colors">
                     </p>
@@ -81,74 +322,69 @@
             </div>
         </div>
     </div>
+    
 
     <!-- SECTION 2: DASHBOARD -->
     <div id="dashboardSection"
-        class="hidden w-full max-w-3xl glass p-8 rounded-2xl shadow-2xl border-t-4 border-pink-500 transition-all duration-500">
-        <header class="flex justify-between items-start mb-6 border-b border-slate-700 pb-4">
+        class="hidden w-full max-w-3xl glass p-8 rounded-2xl shadow-2xl border-t-4  transition-all duration-500 blur-bg" style="--bg-image:url('dashboard-bg.jpg'); margin: auto; margin-top: 30px; background: linear-gradient(rgba(52, 73, 94, 0.936), rgba(27, 41, 54, 0.712)); ">
+        <header class="flex justify-between items-start mb-6 border-b border-slate-700 pb-4" style="margin: auto;">
             <div>
-                <h2 class="text-2xl font-bold text-white">Issuance Dashboard</h2>
-                <p class="text-slate-400 text-sm">Securely issue Verifiable Credentials.</p>
+                <h2 class="text-2xl font-bold text-white" style="color: #bdc3c7;">Issuance Dashboard</h2>
+                <p class="text-slate-400 text-sm" style="color: #bdc3c7;">Securely issue Verifiable Credentials.</p>
             </div>
             <div class="text-right">
                 <p class="text-[10px] text-slate-500 uppercase">Status</p>
-                <p class="text-green-400 text-xs font-bold flex items-center justify-end gap-1">
+                <p class=" text-xs font-bold flex items-center justify-end gap-1" style="color: #7f8c8d;">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Active
                 </p>
             </div>
         </header>
 
         <!-- GLOBAL AUTH (Used by both modes) -->
-        <div class="mb-8 bg-slate-950/50 p-4 rounded-xl border border-slate-700/50">
-            <div class="flex justify-between items-center mb-2">
-                <label class="block text-xs font-bold text-pink-400 uppercase">1. Authorization (Required)</label>
-                <span class="text-[10px] text-slate-500">Key is cached in browser session only</span>
+        <div class="mb-8 bg-slate-950/50 p-4 rounded-xl border border-slate-700/50" style="border-radius: 0 0 10px 10px; background-color: #bdc3c7;">
+            <div class="flex justify-between items-center mb-2" style="border-radius: 0 0 10px 10px;">
+                <label class="block text-xs font-bold  uppercase" style="color: #ecf0f1;">1. Authorization (Required)</label>
+                <span class="text-[10px] text-slate-500" style="color: #ecf0f1;">Key is cached in browser session only</span>
             </div>
             <div class="space-y-3">
-                <input id="issuerNameInput" type="text" placeholder="Your Registered Institution Name (e.g. Stanford)"
-                    class="w-full p-3 rounded bg-slate-900 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono text-xs text-pink-100 placeholder-slate-600">
-                <input id="issuerKey" type="password"
-                    placeholder="Paste your Issuer Private Key here (Common for all issuances)"
-                    class="w-full p-3 rounded bg-slate-900 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono text-xs text-pink-100 placeholder-slate-600">
+                <input id="issuerNameInput" type="text" placeholder="Your Registered Institution Name (e.g. Stanford)" class="form-input text-xs text-pink-100 placeholder-slate-600">
+                <input id="issuerKey" type="password" placeholder="Paste your Issuer Private Key here (Common for all issuances)" class="form-input text-xs text-pink-100 placeholder-slate-600">
             </div>
         </div>
 
         <!-- TABS -->
         <div class="flex space-x-4 mb-6 border-b border-slate-700">
             <button id="tabSingle"
-                class="pb-2 text-sm font-bold text-pink-400 border-b-2 border-pink-400 transition-colors">
+                class="pb-2 text-sm font-bold  border-b-2 border-#bdc3c7-400 s" style="color: #bdc3c7;">
                 Single Issue
             </button>
-            <button id="tabBatch" class="pb-2 text-sm font-bold text-slate-500 hover:text-slate-300 transition-colors">
+            <button id="tabBatch" class="pb-2 text-sm font-bold text-slate-500 hover:text-slate-300" style="color: #bdc3c7;">
                 Batch Issue (Bulk)
             </button>
         </div>
 
         <!-- MODE: SINGLE ISSUE -->
         <div id="panelSingle" class="grid md:grid-cols-1 gap-6">
-            <div class="space-y-4">
+            <div class="space-y-4" style="width: 100%; border-radius: 10px;">
                 <h3 class="text-sm font-bold text-slate-300 uppercase">Recipient Details</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Credential ID</label>
-                        <input id="credID" type="text" placeholder="e.g. CERT-2024-001"
-                            class="w-full p-3 rounded bg-slate-950 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono text-xs">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2" style="color: #ecf0f1;">Credential ID</label>
+                        <input id="credID" type="text" placeholder="e.g. CERT-2024-001" class="form-input text-xs">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">PDF Document</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2" >PDF Document</label>
                         <input id="pdfFile" type="file" accept="application/pdf"
-                            class="w-full text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-pink-600 file:text-white hover:file:bg-pink-700 cursor-pointer" />
+                            class="file-input text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-full  file:text-xs file:font-semibold file:bg-#7f8c8d-600 file:text-#34495e hover:file:bg-#2c3e50-700 cursor-pointer" />
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Student Public Key
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2" style="color: #ecf0f1;">Student Public Key
                         (Hex)</label>
-                    <input id="studentPub" type="text" placeholder="Provided by student"
-                        class="w-full p-3 rounded bg-slate-950 border border-slate-700 outline-none focus:border-pink-500 transition-all font-mono text-xs">
+                    <input id="studentPub" type="text" placeholder="Provided by student" class="form-input text-xs">
                 </div>
 
-                <button id="issueBtn"
-                    class="w-full bg-slate-800 hover:bg-pink-600 p-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 border border-slate-600 hover:border-pink-400 text-slate-200 hover:text-white mt-4">
+                <button id="issueBtn" class="btn btn-primary btn-active" style="background:#374151; border:1px solid#BDC3C7; color:#BDC3C7;">
                     Sign & Issue Credential
                 </button>
                 <div id="issueResult"
@@ -157,13 +393,13 @@
         </div>
 
         <!-- MODE: BATCH ISSUE -->
-        <div id="panelBatch" class="hidden space-y-6">
-            <div class="bg-blue-900/20 border border-blue-500/30 p-4 rounded-lg">
-                <h3 class="text-sm font-bold text-blue-400 mb-2">Batch Instructions</h3>
+        <div id="panelBatch" class="hidden space-y-6" >
+            <div class=" p-4 rounded-lg" style="background: linear-gradient(#bdc3c7, #34495e);">
+                <h3 class="text-sm font-bold text-#34495es-400 mb-2">Batch Instructions</h3>
                 <ol class="list-decimal list-inside text-xs text-slate-400 space-y-1">
-                    <li>Create a JSON file named <code>manifest.json</code> (see format below).</li>
-                    <li>Ensure <code>pdfFileName</code> matches the files you upload.</li>
-                    <li>Select the Manifest and <b>ALL</b> PDF files together.</li>
+                    <li style="color: #34495e;">Create a JSON file named <code>manifest.json</code> (see format below).</li>
+                    <li style="color: #34495e;">Ensure <code>pdfFileName</code> matches the files you upload.</li>
+                    <li style="color: #34495e;">Select the Manifest and <b>ALL</b> PDF files together.</li>
                 </ol>
                 <pre class="bg-black/50 p-2 mt-2 rounded text-[10px] text-slate-300 font-mono overflow-x-auto">
 [
@@ -176,18 +412,17 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">1. Manifest File (JSON)</label>
                     <input id="batchManifest" type="file" accept=".json"
-                        class="w-full text-xs text-slate-300 file:mr-2 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" />
+                        class="file-input text-xs text-slate-300 file:mr-2 file:py-2 file:px-4 file:rounded  file:text-xs file:font-semibold file:bg-#7F8C8D-600 file:text-#2C3E50 hover:file:bg-#BDC3C7-700 cursor-pointer" />
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">2. PDF Certificates
                         (Multiple)</label>
                     <input id="batchFiles" type="file" accept="application/pdf" multiple
-                        class="w-full text-xs text-slate-300 file:mr-2 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" />
+                        class="file-input text-xs text-slate-300 file:mr-2 file:py-2 file:px-4 file:rounded  file:text-xs file:font-semibold file:bg-#7F8C8D-600 file:text-#2C3E50 hover:file:bg-#BDC3C7-700 cursor-pointer" />
                 </div>
             </div>
 
-            <button id="batchIssueBtn"
-                class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 p-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 border border-white/10">
+            <button id="batchIssueBtn" class="btn btn-primary btn-active" style=" background:#374151; border:1px solid#BDC3C7; color:#BDC3C7 ;">
                 Start Batch Processing
             </button>
 
@@ -204,9 +439,12 @@
 
     <!-- Login Visual -->
     <div id="loginPrompt" class="text-center mt-4">
-        <p class="text-sm text-slate-400">Already registered? <button id="showDashboardLink"
-                class="text-pink-400 hover:underline">Access Dashboard</button></p>
+        <p class="text-sm text-slate-400">Already registered? <button id="showDashboardLink" class=" hover:underline" style="color: #0077b6;">Access Dashboard</button></p>
     </div>
+
+    <footer class="mt-16 text-slate-600 text-xs" style="margin-top: 100px;">
+        <span style="color: #7f8c8d;">&copy; 2026 Pillar Wallet Protocol. Built on Hyperledger Fabric.</span>
+    </footer>
 
     <script type="module">
         import * as eccryptoJS from 'https://esm.sh/eccrypto-js@5.4.0';

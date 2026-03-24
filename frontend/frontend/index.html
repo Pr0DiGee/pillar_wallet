@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pillar Wallet - Decentralized Trust</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Centralized semantic styles to replace utility-heavy markup */
+        /* body{
+            background-image: url("back.jfif");
+            background-position: center;
+            background-size: cover;
+        } */
+        :root {
+            --card-width: 500px;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --muted: #94a3b8;
+            --radius: 0.75rem;
+        }
+
+        /* Card slide-up animation */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Layout */
+        .card1, .card2, .card3 {
+            width: var(--card-width);
+            display: block;
+            position: relative;
+            text-decoration: none;
+            transition: 0.5s;
+        }
+
+        .card1 {
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .card2 {
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        .card3 {
+            animation: slideUp 0.8s ease-out 0.6s both;
+        }
+        
+        
+        .card1:hover{
+            border-bottom: 3px solid #0077b6;
+            transform: scale(1.05);
+            transition: 0.5s; 
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+        .card2:hover{
+            border-bottom: 3px solid #00b4d8;
+            transform: scale(1.05);
+            transition: 0.5s; 
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+        
+        .card3:hover{
+            border-bottom: 3px solid #90e0ef;
+            transform: scale(1.05);
+            transition: 0.5s; 
+            border-radius: 0 0 var(--radius) var(--radius);
+        }  
+
+        .card3 img{
+            border-radius: var(--radius);
+        }
+
+
+
+        .card1 span, .card2 span, .card3 span{
+            transition: 0.5s;
+            
+        }
+       
+        .card1 span:hover{
+            -webkit-text-stroke: 1px #0077b6;
+            transition: 0.5s;
+            color: transparent;
+        }
+        .card2 span:hover{
+            -webkit-text-stroke: 1px #00b4d8;
+            transition: 0.5s;
+            color: transparent;
+        }
+        .card3 span:hover{
+            -webkit-text-stroke: 1px #90e0ef;
+            transition: 0.5s;
+            color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            margin: 40px auto 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* Glass panel */
+        .card-panel {
+            position: relative;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: var(--radius);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.25s ease;
+            overflow: hidden;
+        }
+
+        .card-panel:hover { transform: translateY(-8px); }
+
+        /* Accent variants -- sets a CSS variable for color usage */
+        .accent-pink { 
+            --accent-color: #0077b6;
+            transition: transform 2s ease;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("school.jfif");
+            background-position: center;
+            background-size: cover;
+        } 
+        
+        .accent-pink:hover{
+           
+            background-image: url("verifyer.jfif");
+            background-position: center;
+            background-size: cover;
+            transition: transform 1s ease;
+             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("school.jfif") center/cover no-repeat;
+            
+        }
+
+        .accent-blue { 
+            --accent-color: #00b4d8; 
+            transition: transform 2s ease;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("student.jfif");
+            background-position: center;
+            background-size: cover;
+        }
+        .accent-blue:hover{
+           
+            background-image: url("student.jfif");
+            background-position: center;
+            background-size: cover;
+            transition: transform 1s ease;
+             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("student.jfif") center/cover no-repeat;
+            
+        }
+        .accent-purple { 
+            --accent-color: #90e0ef; 
+            transition: transform 2s ease;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("verifyer.jfif");
+            background-position: center;
+            background-size: cover;
+            
+            
+        }
+        .accent-purple:hover{
+           
+            background-image: url("verifyer.jfif");
+            background-position: center;
+            background-size: cover;
+            transition: transform 1s ease;
+             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("verifyer.jfif") center/cover no-repeat;
+            
+        }
+
+        /* Decorative blurred background for each card */
+        .card-bg {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            filter: blur(0px);
+            opacity: 0.1;
+            transition: opacity 0.25s ease;
+        }
+
+        .card:hover .card-bg { opacity: 0.67; }
+
+        .card-bg.pink { background-color: #0077b6; }
+        .card-bg.blue { background-color: #00b4d8; }
+        .card-bg.purple { background-color: #90e0ef; 
+            
+        }
+
+        /* Icon container */
+        .icon-circle {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: rgba(255,255,255,0.95);
+            background-color: rgba(255,255,255,0.06);
+        }
+
+        /* Use accent color for subtle background variants */
+        .accent-pink .icon-circle { background-color: rgba(0,119,182,0.13); color: #00b4d8; }
+        .accent-blue .icon-circle { background-color: rgba(0,180,216,0.13); color: #90e0ef; }
+        .accent-purple .icon-circle { background-color: rgba(144,224,239,0.13); color: #caf0f8; }
+
+        /* Card text */
+        .card-title { font-size: 1.125rem; font-weight: 700; color: #fff; margin: 0 0 0.35rem; }
+        .card-desc { color: var(--muted); font-size: 0.875rem; margin: 0 0 1.25rem; flex-grow: 1; }
+        .card-cta { color: var(--accent-color); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+
+        /* Header */
+        header { 
+            width: 100%; 
+            margin: 0 auto; 
+            padding: 10px; 
+            background: linear-gradient(rgba(52, 73, 94, 0.936), rgba(27, 41, 54, 0.712)); 
+            text-align: center;
+            animation: slideUp 0.8s ease-out 0.05s both;
+        }
+        .hero-title { 
+            font-size: 3rem; 
+            font-weight: 800; 
+            color: #0077b6; 
+            -webkit-background-clip: text; 
+           -webkit-text-stroke: 1px #00b4d8;
+            background-clip: text; 
+            margin: 0 0 0.75rem; 
+            transition: 0.5s;
+            animation: slideUp 0.8s ease-out 0.1s both;
+        }
+        .hero-title:hover{
+            -webkit-text-stroke: 1px #00b4d8;
+            transition: 0.5s;
+        }
+        .header-desc { 
+            color: #00b4d8; 
+            margin: 0; 
+        }
+
+        /* Footer */
+        .site-footer { 
+            margin-top: 4rem; 
+            color: #caf0f8; 
+            font-size: 0.75rem; 
+            transition: 0.5s;
+
+        }
+        footer{
+            width: 100%;
+            justify-content: center;
+            padding: 20px;
+            height: 100px;
+           background: linear-gradient( #34495e, #1b2936); 
+            font-size: 50px;
+            margin: auto;
+        
+        }
+
+        /* Optional pattern utility (kept for possible reuse) */
+        .hero-pattern { 
+            background-color: #03045e; 
+            background-image: radial-gradient(#0077b6 1px, transparent 1px); 
+            background-size: 32px 32px; 
+        }
+        body{
+            background-image: url("download.jpg");
+            background-position: center;
+            background-color: #e0f2fe;
+            margin: 0;
+            box-sizing: 0;
+            font-family: sans-serif;
+            position: relative;
+        }
+        body::before { content: ""; position: fixed; inset: 0; background: rgba(197, 197, 200, 0.45); pointer-events: none; z-index: -1; }
+    </style>
+    
+</head>
+
+<body>
+    <!-- class="hero-pattern text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 selection:bg-indigo-500 selection:text-white" -->
+
+    <header>
+        <h1 class="hero-title">Pillar Wallet</h1>
+        <p class="header-desc">The Sovereign Identity Layer for Higher Education.</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Card 1: University -->
+        <a href="university.html" class="card1">
+            <div class="card-bg pink"></div>
+            <div class="card-panel accent-pink">
+                <div class="icon-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+                    </svg>
+                </div>
+                <h2 class="card-title">University Portal</h2>
+                <p class="card-desc">Join the network, register your institution, and issue verifiable credentials securely.</p>
+                <span class="card-cta">Access Portal →</span>
+            </div>
+        </a>
+
+        <!-- Card 2: Student -->
+        <a href="student.html" class="card2">
+            <div class="card-bg blue"></div>
+            <div class="card-panel accent-blue">
+                <div class="icon-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+                    </svg>
+                </div>
+                <h2 class="card-title">Student Portal</h2>
+                <p class="card-desc">Manage your identity wallet, decrypt certificates, and own your academic history.</p>
+                <span class="card-cta">Access Wallet →</span>
+            </div>
+        </a>
+
+        <!-- Card 3: Verifier -->
+        <a href="verifier.html" class="card3">
+           
+            <div class="card-bg purple">
+                <!-- <img src="verifyer.jfif" > -->
+            </div>
+            <div class="card-panel accent-purple">
+                <div class="icon-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.746 3.746 0 0 1 21 12Z" />
+                    </svg>
+                </div>
+                <h2 class="card-title">Verifier Portal</h2>
+                <p class="card-desc">Third-party audit node for employers to verify cryptographic proofs.</p>
+                <span class="card-cta">Start Audit →</span>
+            </div>
+        </a>
+
+    </div>
+
+    <footer class="mt-16 text-slate-600 text-xs" style="margin-top: 100px;">
+        <span style="color: #7f8c8d;">&copy; 2026 Pillar Wallet Protocol. Built on Hyperledger Fabric.</span>
+    </footer>
+
+</body>
+
+</html>
