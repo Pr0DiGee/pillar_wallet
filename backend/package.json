@@ -9,7 +9,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.14.3",
     "@hyperledger/fabric-gateway": "^1.10.0",
-    "axios": "^1.4.0",
+    "axios": "^1.13.6",
     "cors": "^2.8.6",
     "dotenv": "^16.0.3",
     "eccrypto-js": "^5.4.0",
